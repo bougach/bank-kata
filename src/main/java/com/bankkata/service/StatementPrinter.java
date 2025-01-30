@@ -8,7 +8,8 @@ public class StatementPrinter {
         System.out.println("DATE       | AMOUNT  | BALANCE");
         int balance = 0;
 
-        for (Transaction transaction : transactions) {
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
             balance += transaction.getAmount();
             System.out.printf("%s | %7d | %7d\n",
                     transaction.getDate(),
@@ -17,4 +18,5 @@ public class StatementPrinter {
             );
         }
     }
+
 }

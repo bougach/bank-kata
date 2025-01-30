@@ -1,10 +1,15 @@
 package com.bankkata;
 
+import com.bankkata.model.Transaction;
 import com.bankkata.service.Account;
 import com.bankkata.service.StatementPrinter;
 import com.bankkata.repository.TransactionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.util.List;
+
 import static org.mockito.Mockito.*;
 
 public class AccountTest {
@@ -32,4 +37,20 @@ public class AccountTest {
         verify(transactionRepository).addWithdrawal(500);
         verify(statementPrinter).print(anyList());
     }
+
+    @Test
+    public void should_print_transactions_in_correct_order() {
+        Transaction t1 = new Transaction(LocalDate.of(2012, 1, 10), 1000);
+        Transaction t2 = new Transaction(LocalDate.of(2012, 1, 13), 2000);
+        Transaction t3 = new Transaction(LocalDate.of(2012, 1, 14), -500);
+
+        List<Transaction> transactions = List.of(t1, t2, t3);
+        when(transactionRepository.allTransactions()).thenReturn(transactions);
+
+        account.printStatement();
+
+        verify(statementPrinter).print(transactions);
+    }
+    
+
 }
